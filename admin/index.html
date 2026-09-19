@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="sr-Latn-ME">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Uređivanje slika | Squad Montenegro</title>
+<style>
+:root{--umber:#21140B;--mud:#33200F;--rust:#F26A1B;--sand:#F1E6D6;--line:rgba(241,230,214,.2);--ok:#7bd88f;--bad:#ff8a7a;--hazard:#F5B700}
+*{box-sizing:border-box}
+body{margin:0;background:var(--umber);color:var(--sand);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#150c06;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;flex-wrap:wrap}
+header h1{font-size:1.1rem;margin:0}
+header .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+button,.btn{font:inherit;font-weight:700;background:var(--rust);color:var(--umber);border:2px solid var(--rust);border-radius:4px;padding:.55em 1.1em;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover:not(:disabled),.btn:hover{background:var(--sand);border-color:var(--sand)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.ghost{background:transparent;color:var(--sand);border-color:var(--line)}
+.ghost:hover:not(:disabled){background:rgba(255,255,255,.08)!important;border-color:var(--sand)!important;color:var(--sand)}
+.note{background:rgba(245,183,0,.12);border-left:5px solid var(--hazard);padding:.8rem 1rem;margin:0 0 1.4rem}
+.note ol{margin:.4rem 0 0;padding-left:1.2rem}
+h3.group{font-size:1.25rem;margin:2.2rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid var(--line)}
+.row{display:grid;grid-template-columns:150px 1fr;gap:16px;background:var(--mud);border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:12px}
+.row.changed{border-color:var(--rust)}
+.thumb{width:150px;height:110px;background:#150c06;border:1px dashed var(--line);display:grid;place-items:center;overflow:hidden;border-radius:4px;font-size:.78rem;color:rgba(241,230,214,.55);text-align:center;padding:4px}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:contain}
+.row b{display:block}
+.row small{display:block;color:rgba(241,230,214,.6);word-break:break-all}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:.6rem}
+.st{font-size:.92rem;margin-top:.5rem;min-height:1.2em}
+.st.err{color:var(--bad)}.st.ok{color:var(--ok)}
+.badge{background:var(--rust);color:var(--umber);border-radius:20px;padding:.05em .6em;font-size:.85rem;font-weight:700;margin-left:.4rem}
+dialog{border:1px solid var(--line);background:var(--mud);color:var(--sand);border-radius:8px;max-width:600px;width:92vw;padding:24px}
+dialog::backdrop{background:rgba(10,6,3,.8)}
+dialog h2{margin:0 0 .6rem}
+dialog ol{padding-left:1.2rem}dialog li{margin:.4rem 0}
+code{background:rgba(255,255,255,.1);padding:.05em .35em;border-radius:3px}
+@media(max-width:560px){.row{grid-template-columns:1fr}.thumb{width:100%;height:170px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Squad Montenegro – uređivanje slika</h1>
+  <div class="actions">
+    <a class="btn ghost" href="../">Otvori sajt</a>
+    <button id="dl" disabled>Preuzmi izmjene (ZIP)<span class="badge" id="cnt" hidden>0</span></button>
+  </div>
+</header>
+<main>
+  <div class="note">
+    <b>Kako radi:</b>
+    <ol>
+      <li>Kod željenog mjesta klikni <b>Izaberi sliku</b> i izaberi fotografiju sa računara (ili telefona). Slika se automatski smanji i prilagodi.</li>
+      <li>Kad završiš, klikni <b>Preuzmi izmjene (ZIP)</b> gore desno.</li>
+      <li>Fajlove iz ZIP-a ubaciš na GitHub (objašnjenje se pojavi poslije preuzimanja). Sajt se osvježi za 1 do 3 minuta.</li>
+    </ol>
+    Ništa se ne mijenja na sajtu dok ti sam ne ubaciš fajlove na GitHub. Tvoji izbori postoje samo u ovom prozoru, zato nemoj zatvarati stranicu prije preuzimanja.
+  </div>
+  <div id="list"></div>
+</main>
+
+<dialog id="done">
+  <h2>ZIP je preuzet. Šta sad?</h2>
+  <ol>
+    <li>Otpakuj ZIP na računaru. Unutra su folderi <code>images</code> i/ili <code>videos</code>.</li>
+    <li>Otvori svoj repozitorijum na <b>github.com</b> i klikni <b>Add file</b>, pa <b>Upload files</b>.</li>
+    <li>Prevuci folder(e) <code>images</code> (i <code>videos</code>) iz otpakovanog ZIP-a u prozor na GitHub-u. Fajlovi sa istim imenom se zamijene novima.</li>
+    <li>Dolje klikni zeleno dugme <b>Commit changes</b>.</li>
+    <li>Za 1 do 3 minuta sajt je ažuriran. Na sajtu pritisni <b>Ctrl+F5</b>.</li>
+  </ol>
+  <p>Ako GitHub ne prihvati prevlačenje foldera, otvori folder <code>images</code> i prevuci samo fajlove iz njega (na GitHub-u prvo uđi u folder <code>images</code>).</p>
+  <button id="closedlg">U redu</button>
+</dialog>
+
+<script>
+var CFG={"slots": [{"path": "images/hero.jpg", "label": "Glavna slika (prikazuje se dok se video učitava)", "group": "1. Početna stranica", "type": "jpg", "maxW": 1920, "crop": null}, {"path": "images/night-tour.jpg", "label": "Noćna tura (sekcija na početnoj)", "group": "1. Početna stranica", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "videos/hero.mp4", "label": "Video u pozadini glavne stranice", "group": "1. Početna stranica", "type": "mp4", "maxW": 1600, "crop": null}, {"path": "images/tour-big-boyz.jpg", "label": "Big Boyz Tour: glavna slika", "group": "2. Ture – glavne slike (uspravne, odnos 4:5)", "type": "jpg", "maxW": 1200, "crop": null}, {"path": "images/tour-boka-beyond.jpg", "label": "The Boka Beyond: glavna slika", "group": "2. Ture – glavne slike (uspravne, odnos 4:5)", "type": "jpg", "maxW": 1200, "crop": null}, {"path": "images/tour-full-send.jpg", "label": "The Full Send: glavna slika", "group": "2. Ture – glavne slike (uspravne, odnos 4:5)", "type": "jpg", "maxW": 1200, "crop": null}, {"path": "images/tour-vista-view.jpg", "label": "The Vista View: glavna slika", "group": "2. Ture – glavne slike (uspravne, odnos 4:5)", "type": "jpg", "maxW": 1200, "crop": null}, {"path": "images/tour-big-boyz-1.jpg", "label": "Big Boyz Tour: dodatna slika 1", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-big-boyz-2.jpg", "label": "Big Boyz Tour: dodatna slika 2", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-big-boyz-3.jpg", "label": "Big Boyz Tour: dodatna slika 3", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-boka-beyond-1.jpg", "label": "The Boka Beyond: dodatna slika 1", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-boka-beyond-2.jpg", "label": "The Boka Beyond: dodatna slika 2", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-boka-beyond-3.jpg", "label": "The Boka Beyond: dodatna slika 3", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-full-send-1.jpg", "label": "The Full Send: dodatna slika 1", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-full-send-2.jpg", "label": "The Full Send: dodatna slika 2", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-full-send-3.jpg", "label": "The Full Send: dodatna slika 3", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-vista-view-1.jpg", "label": "The Vista View: dodatna slika 1", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-vista-view-2.jpg", "label": "The Vista View: dodatna slika 2", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/tour-vista-view-3.jpg", "label": "The Vista View: dodatna slika 3", "group": "3. Ture – dodatne slike", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/gallery-01.jpg", "label": "Galerija: slika 1", "group": "4. Galerija", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/gallery-02.jpg", "label": "Galerija: slika 2", "group": "4. Galerija", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/gallery-03.jpg", "label": "Galerija: slika 3", "group": "4. Galerija", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/gallery-04.jpg", "label": "Galerija: slika 4", "group": "4. Galerija", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/gallery-05.jpg", "label": "Galerija: slika 5", "group": "4. Galerija", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/gallery-06.jpg", "label": "Galerija: slika 6", "group": "4. Galerija", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/fortress-rizon.jpg", "label": "Tvrđava Rizon", "group": "5. Tvrđave", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/fortress-saint-andrija.jpg", "label": "Tvrđava Sv. Andrija", "group": "5. Tvrđave", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/night-tour-1.jpg", "label": "Noćna tura: slika 1", "group": "6. Stranica Noćna tura", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/night-tour-2.jpg", "label": "Noćna tura: slika 2", "group": "6. Stranica Noćna tura", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/night-tour-3.jpg", "label": "Noćna tura: slika 3", "group": "6. Stranica Noćna tura", "type": "jpg", "maxW": 1600, "crop": null}, {"path": "images/partners/abeona.png", "label": "Abeona (rent-a-car)", "group": "7. Partneri (logotipi)", "type": "png", "maxW": 800, "crop": null}, {"path": "images/partners/apartmani-meri.png", "label": "Apartmani Meri", "group": "7. Partneri (logotipi)", "type": "png", "maxW": 800, "crop": null}, {"path": "images/partners/green-dream.png", "label": "Green Dream Apartments", "group": "7. Partneri (logotipi)", "type": "png", "maxW": 800, "crop": null}, {"path": "images/partners/katuric.png", "label": "Katurić Apartments", "group": "7. Partneri (logotipi)", "type": "png", "maxW": 800, "crop": null}, {"path": "images/partners/locanda.png", "label": "Locanda", "group": "7. Partneri (logotipi)", "type": "png", "maxW": 800, "crop": null}, {"path": "images/partners/marija-d.jpg", "label": "Turistički brod Marija D", "group": "7. Partneri (logotipi)", "type": "jpg", "maxW": 800, "crop": null}, {"path": "images/partners/our-lady-of-the-rocks.jpg", "label": "Gospa od Škrpjela (brod)", "group": "7. Partneri (logotipi)", "type": "jpg", "maxW": 800, "crop": null}, {"path": "images/apple-touch-icon.png", "label": "Logo ikona za telefon", "group": "8. Ikone i dijeljenje linka", "type": "png", "maxW": 180, "crop": [180, 180]}, {"path": "images/favicon.png", "label": "Ikona sajta u browseru (favicon)", "group": "8. Ikone i dijeljenje linka", "type": "png", "maxW": 64, "crop": [64, 64]}, {"path": "images/og-cover.jpg", "label": "Slika koja se vidi kad podijeliš link (Facebook, WhatsApp)", "group": "8. Ikone i dijeljenje linka", "type": "jpg", "maxW": 1200, "crop": [1200, 630]}]};
+(function(){
+  var $=function(s){return document.querySelector(s);};
+  var CH={}, dirty=false;
+
+  function setMsg(el,t,cls){el.textContent=t||'';el.className='st'+(cls?' '+cls:'');}
+  function fmt(n){return n/1024<1024?Math.round(n/1024)+' KB':(n/1048576).toFixed(1)+' MB';}
+  function count(){
+    var n=Object.keys(CH).length;
+    $('#dl').disabled=!n; var c=$('#cnt'); c.hidden=!n; c.textContent=n;
+  }
+
+  function thumbHTML(s,url){
+    return s.type==='mp4'?'<video muted playsinline preload="metadata" src="'+url+'"></video>':'<img alt="" src="'+url+'">';
+  }
+
+  function render(){
+    var list=$('#list'); list.innerHTML='';
+    var groups=[]; CFG.slots.forEach(function(s){if(groups.indexOf(s.group)<0)groups.push(s.group);});
+    groups.forEach(function(g){
+      var h=document.createElement('h3');h.className='group';h.textContent=g;list.appendChild(h);
+      CFG.slots.filter(function(s){return s.group===g;}).forEach(function(s){list.appendChild(row(s));});
+    });
+  }
+
+  function row(s){
+    var el=document.createElement('div'); el.className='row';
+    var th=document.createElement('div'); th.className='thumb';
+    function showCurrent(){
+      th.textContent='Učitavam...';
+      th.innerHTML=thumbHTML(s,'../'+s.path+'?v='+Date.now());
+      var m=th.querySelector('img,video'); if(m) m.onerror=function(){th.innerHTML='';th.textContent='Još nema fajla';};
+    }
+    showCurrent();
+    var info=document.createElement('div');
+    info.innerHTML='<b></b><small></small>';
+    info.querySelector('b').textContent=s.label;
+    info.querySelector('small').textContent=s.path+(s.type==='mp4'?' (MP4 video, do 20 MB, preporuka do 8 MB)':(s.crop?' ('+s.crop[0]+'x'+s.crop[1]+' px)':''));
+    var inp=document.createElement('input');inp.type='file';inp.accept=s.type==='mp4'?'video/mp4':'image/*';inp.hidden=true;
+    var pick=document.createElement('button');pick.className='ghost';pick.textContent=s.type==='mp4'?'Izaberi video':'Izaberi sliku';
+    var undo=document.createElement('button');undo.className='ghost';undo.textContent='Poništi izbor';undo.hidden=true;
+    var st=document.createElement('div');st.className='st';
+    var btns=document.createElement('div');btns.className='btns';btns.append(pick,undo,inp);
+    info.append(btns,st); el.append(th,info);
+
+    pick.onclick=function(){inp.click();};
+    inp.onchange=function(){
+      var f=inp.files&&inp.files[0]; if(!f)return;
+      setMsg(st,'Obrađujem...');
+      process(f,s).then(function(p){
+        if(CH[s.path]) URL.revokeObjectURL(CH[s.path].url);
+        CH[s.path]=p; dirty=true; th.innerHTML=thumbHTML(s,p.url);
+        el.classList.add('changed'); undo.hidden=false;
+        setMsg(st,'Nova slika spremna ('+fmt(p.blob.size)+'). Kad završiš, klikni Preuzmi izmjene.','ok'); count();
+      }).catch(function(err){setMsg(st,err.message||'Fajl nije moguće obraditi.','err');}).then(function(){inp.value='';});
+    };
+    undo.onclick=function(){
+      if(CH[s.path]){URL.revokeObjectURL(CH[s.path].url);delete CH[s.path];}
+      el.classList.remove('changed');undo.hidden=true;setMsg(st,'');showCurrent();count();
+    };
+    return el;
+  }
+
+  function process(file,s){
+    if(s.type==='mp4'){
+      if(!/mp4/i.test(file.type)&&!/\.mp4$/i.test(file.name)) return Promise.reject(new Error('Potreban je MP4 video.'));
+      if(file.size>20*1024*1024) return Promise.reject(new Error('Video je veći od 20 MB. Smanji ga (preporuka do 8 MB).'));
+      return Promise.resolve({blob:file,url:URL.createObjectURL(file)});
+    }
+    if(!/^image\//.test(file.type)) return Promise.reject(new Error('Izaberi sliku (JPG, PNG ili WebP).'));
+    return createImageBitmap(file,{imageOrientation:'from-image'}).catch(function(){throw new Error('Ovaj format slike nije podržan. Probaj JPG ili PNG.');}).then(function(bmp){
+      var sw=bmp.width,sh=bmp.height,sx=0,sy=0,cw=sw,ch=sh,dw,dh;
+      if(s.crop){
+        dw=s.crop[0];dh=s.crop[1];var ar=dw/dh;
+        if(sw/sh>ar){cw=Math.round(sh*ar);sx=Math.round((sw-cw)/2);}else{ch=Math.round(sw/ar);sy=Math.round((sh-ch)/2);}
+      } else {var k=Math.min(1,s.maxW/sw);dw=Math.round(sw*k);dh=Math.round(sh*k);}
+      var c=document.createElement('canvas');c.width=dw;c.height=dh;var x=c.getContext('2d');
+      if(s.type==='jpg'){x.fillStyle='#ffffff';x.fillRect(0,0,dw,dh);}
+      x.imageSmoothingQuality='high';
+      x.drawImage(bmp,sx,sy,cw,ch,0,0,dw,dh);
+      return new Promise(function(res,rej){c.toBlob(function(b){b?res({blob:b,url:URL.createObjectURL(b)}):rej(new Error('Obrada slike nije uspjela.'));},s.type==='jpg'?'image/jpeg':'image/png',0.85);});
+    });
+  }
+
+  /* ---------- minimalni ZIP (bez kompresije) ---------- */
+  var T=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+  function crc32(u8){var c=0xFFFFFFFF;for(var i=0;i<u8.length;i++)c=T[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+  function zip(files){
+    var enc=new TextEncoder(), d=new Date();
+    var time=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1);
+    var date=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();
+    var parts=[], central=[], offset=0;
+    files.forEach(function(f){
+      var name=enc.encode(f.name), crc=crc32(f.data), size=f.data.length;
+      var lh=new DataView(new ArrayBuffer(30));
+      lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);
+      lh.setUint16(10,time,true);lh.setUint16(12,date,true);lh.setUint32(14,crc,true);lh.setUint32(18,size,true);lh.setUint32(22,size,true);
+      lh.setUint16(26,name.length,true);lh.setUint16(28,0,true);
+      parts.push(new Uint8Array(lh.buffer),name,f.data);
+      var ch=new DataView(new ArrayBuffer(46));
+      ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(10,0,true);
+      ch.setUint16(12,time,true);ch.setUint16(14,date,true);ch.setUint32(16,crc,true);ch.setUint32(20,size,true);ch.setUint32(24,size,true);
+      ch.setUint16(28,name.length,true);ch.setUint16(30,0,true);ch.setUint16(32,0,true);ch.setUint16(34,0,true);ch.setUint16(36,0,true);ch.setUint32(38,0,true);ch.setUint32(42,offset,true);
+      central.push(new Uint8Array(ch.buffer),name);
+      offset+=30+name.length+size;
+    });
+    var csize=0;central.forEach(function(p){csize+=p.length;});
+    var end=new DataView(new ArrayBuffer(22));
+    end.setUint32(0,0x06054b50,true);end.setUint16(4,0,true);end.setUint16(6,0,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);
+    end.setUint32(12,csize,true);end.setUint32(16,offset,true);end.setUint16(20,0,true);
+    return new Blob(parts.concat(central,[new Uint8Array(end.buffer)]),{type:'application/zip'});
+  }
+
+  $('#dl').addEventListener('click',function(){
+    var paths=Object.keys(CH); if(!paths.length)return;
+    var btn=$('#dl'); btn.disabled=true;
+    Promise.all(paths.map(function(p){return CH[p].blob.arrayBuffer().then(function(b){return {name:p,data:new Uint8Array(b)};});})).then(function(files){
+      var blob=zip(files), a=document.createElement('a'), d=new Date();
+      var pad=function(n){return ('0'+n).slice(-2);};
+      a.href=URL.createObjectURL(blob);
+      a.download='squad-izmjene-'+d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'.zip';
+      document.body.appendChild(a);a.click();a.remove();
+      dirty=false; $('#done').showModal();
+    }).catch(function(){alert('Pravljenje ZIP-a nije uspjelo. Pokušaj ponovo.');}).then(function(){btn.disabled=!Object.keys(CH).length;});
+  });
+  $('#closedlg').addEventListener('click',function(){$('#done').close();});
+  window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue='';}});
+
+  render();
+})();
+</script>
+</body>
+</html>
