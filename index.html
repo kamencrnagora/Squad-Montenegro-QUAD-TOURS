@@ -755,10 +755,19 @@ form.inq .check input{width:auto;margin-top:.25rem}
       e.preventDefault();
       var b=f.querySelector('button[type=submit]');
       st.textContent=f.getAttribute('data-sending'); b.disabled=true;
-      fetch('https://formsubmit.co/ajax/squad.mne@gmail.com',{method:'POST',headers:{'Accept':'application/json'},body:new FormData(f)})
-        .then(function(r){return r.json();})
-        .then(function(d){if(d.success===true||d.success==='true'){st.textContent=f.getAttribute('data-ok');f.reset();}else{throw new Error('x');}})
-        .catch(function(){st.textContent=f.getAttribute('data-err');})
+      var data={}; new FormData(f).forEach(function(v,k){data[k]=v;});
+      fetch('https://formsubmit.co/ajax/squad.mne@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+        .then(function(r){return r.text().then(function(t){var j=null;try{j=JSON.parse(t);}catch(x){}return {j:j,status:r.status};});})
+        .then(function(x){
+          if(x.j&&(x.j.success===true||x.j.success==='true')){st.textContent=f.getAttribute('data-ok');f.reset();return;}
+          var why=(x.j&&x.j.message)?String(x.j.message):('HTTP '+x.status);
+          st.textContent=f.getAttribute('data-err')+' ('+why+')';
+          if(window.console)console.warn('FormSubmit response:',x);
+        })
+        .catch(function(){
+          if(navigator.onLine===false){st.textContent=f.getAttribute('data-err');return;}
+          f.submit();
+        })
         .then(function(){b.disabled=false;});
     });
   }
