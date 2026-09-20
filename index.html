@@ -335,7 +335,7 @@ ul{margin:0;padding:0;list-style:none}
 .nav .btn{padding:.55em 1.1em}
 .nav .btn:hover{color:var(--umber)}
 .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--sand);font:inherit;padding:.4em .9em;border-radius:3px}
-@media(max-width:1100px){
+@media(max-width:1200px){
   .menu-btn{display:block}
   .nav{display:none;position:absolute;left:0;right:0;top:100%;background:var(--umber);flex-direction:column;align-items:flex-start;padding:16px 20px 24px;gap:1rem;border-bottom:1px solid var(--line)}
   .nav.open{display:flex}
@@ -497,6 +497,31 @@ form.inq .check input{width:auto;margin-top:.25rem}
 .gallery.two{grid-template-columns:repeat(2,1fr)}
 @media(max-width:820px){.gallery.three{grid-template-columns:1fr 1fr}}
 .contact-list a{font-weight:700}
+.split>*,.book-grid>*,.safety>*{min-width:0}
+h1,h2,h3{overflow-wrap:break-word;hyphens:auto}
+.hero h1{font-size:clamp(2.6rem,7.4vw,6.8rem);line-height:.9;max-width:15ch;text-wrap:balance}
+.eyebrow{font-weight:700;letter-spacing:.05em;margin:0 0 .7rem;color:var(--sand)}
+.hero .where{margin-top:1.1rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem .6rem;margin:1.5rem 0 0;padding:0;list-style:none}
+.chips li{border:1px solid var(--line);background:rgba(33,20,11,.6);padding:.25em .85em;font-size:.9rem;border-radius:20px}
+.chips a{text-decoration:none}.chips a:hover{text-decoration:underline}
+#reviews .stars,.rv .stars{color:#E39A00;letter-spacing:.14em;font-size:1.3rem;line-height:1}
+#reviews h2{margin-top:.5rem}
+.rv-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.2rem 2rem;margin-bottom:2rem}
+.rv-rating{font-size:1.1rem;margin:.6rem 0 0}
+.rv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.rv{margin:0;background:#fff;color:var(--ink);padding:1.4rem 1.5rem;border-radius:4px;display:flex;flex-direction:column;gap:.7rem;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.rv.big{grid-column:1/-1;padding:clamp(1.4rem,3vw,2.4rem)}
+.rv.big blockquote{font-size:1.2rem}
+.rv blockquote{margin:0;line-height:1.6}
+.rv figcaption{margin-top:auto;font-size:.95rem;color:#444}
+.rv figcaption b{color:var(--ink)}
+.rv-foot{display:flex;flex-wrap:wrap;gap:1rem 1.6rem;align-items:center;margin-top:1.6rem;font-size:.92rem;color:#445}
+.mist .btn.ghost{border-color:var(--ink)}
+@media(max-width:760px){.rv-grid{grid-template-columns:1fr}}
+.safety-first{max-width:860px;margin-top:3.2rem;border-left:5px solid var(--rust);padding-left:1.4rem}
+.safety-first h2{font-size:clamp(1.8rem,3.4vw,2.4rem)}
+.safety-first .faq{max-width:none;margin-top:1rem}
 .social{display:flex;gap:1rem;flex-wrap:wrap}
 @media(max-width:960px){.nav .lang{margin-top:.4rem}}
 </style>
@@ -509,6 +534,7 @@ form.inq .check input{width:auto;margin-top:.25rem}
   <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
   <nav class="nav" id="nav" aria-label="Main">
     <a href="./#tours">Tours</a>
+    <a href="./#reviews">Reviews</a>
     <a href="./#fortresses">Fortresses</a>
     <a href="night-tour/">Night tour</a>
     <a href="./#gallery">Gallery</a>
@@ -524,10 +550,12 @@ form.inq .check input{width:auto;margin-top:.25rem}
   <div class="hero-media"><video autoplay muted loop playsinline preload="metadata" poster="images/hero.jpg" aria-hidden="true" onerror="this.remove()"><source src="videos/hero.mp4" type="video/mp4"></video></div>
   <div class="soon">New tour to Orjen coming soon</div>
   <div class="wrap">
-    <h1>Quad Tours<br>Montenegro</h1>
-    <p class="where">Risan, Perast, Kotor</p>
-    <p class="lead">Ride through the wild mountains of the Bay of Kotor. Guided ATV adventures you will never forget.</p>
+    <p class="eyebrow">Quad Tours Montenegro</p>
+    <h1>ATV Quad Tours above the Bay of Kotor</h1>
+    <p class="where">Risan • Perast • Kotor</p>
+    <p class="lead">Guided mountain adventures from €139.99 per quad.</p>
     <div class="hero-cta"><a class="btn" href="#tours">View tours</a><a class="btn ghost" href="#book">Book now</a></div>
+    <ul class="chips"><li>Guided tours</li><li>Helmet and gear included</li><li>Passengers from 12 years</li><li><a href="#reviews">Real Google reviews</a></li></ul>
   </div>
 </section>
 
@@ -600,6 +628,20 @@ form.inq .check input{width:auto;margin-top:.25rem}
   <p class="fine">Book 2 or more quads and get 10% off. You may be eligible for an additional discount through our partner programme. Times are approximate and may vary slightly depending on weather, road conditions and participants.</p>
 </div></section>
 
+<section class="section mist" id="reviews"><div class="wrap">
+  <div class="rv-head">
+    <div>
+      <div class="stars" aria-hidden="true">★★★★★</div>
+      <h2>What our riders say</h2>
+      <p class="lead" style="margin-top:.8rem">Real reviews from our guests on Google.</p>
+      
+    </div>
+    <a class="btn" href="https://www.google.com/maps/place/Quad+tours+-+Squad+Montenegro/@42.5128089,18.6989249,1977m/data=!3m1!1e3!4m6!3m5!1s0x134c375ee5b7c4a9:0xc20cc42c76129c5b!8m2!3d42.511432!4d18.6956426!16s%2Fg%2F11yh1zy04c?entry=ttu&g_ep=EgoyMDI2MDkxNS4wIKXMDSoASAFQAw%3D%3D" rel="noopener" target="_blank">Read all reviews on Google</a>
+  </div>
+  <div class="rv-grid"><figure class="rv big"><div class="stars" role="img" aria-label="5 / 5">★★★★★</div><blockquote lang="en">We had a fantastic 5-hour quad bike tour with Vladimir, exploring the old Montenegrin roads that once served as the main access to Kotor Bay. The views were absolutely breathtaking. The whole day was very well organized – Vladimir shared his great knowledge and made the trip even more enjoyable with his company. A highlight was the picnic with homemade sandwiches and traditional cornbread prepared by his mother – thank you to her as well! An unforgettable day in Montenegro.</blockquote><figcaption><b>Greg Zmyslowski</b> <span>Local Guide · Google</span></figcaption></figure><figure class="rv"><div class="stars" role="img" aria-label="5 / 5">★★★★★</div><blockquote lang="en">It was superb!! Loved every sec! Vladimir was extremely nice, helpful, cool, and easy!! Was worth every penny, really cheap price comparing to the all the other ones, and way better. He made stunning pictures/videos for us. Stunning brand new vehicles. Would definitely recommend it!! Go knock yourselves out!</blockquote><figcaption><b>Ruck Rental</b> <span>Google</span></figcaption></figure><figure class="rv"><div class="stars" role="img" aria-label="5 / 5">★★★★★</div><blockquote lang="en">Many thanks to the lovely Vladimir for a perfect ATV trip, with breathtaking views. Vladimir was very generous, kind and attentive to our needs. Thank you for a wonderful experience. Highly recommended</blockquote><figcaption><b>revital mamrud</b> <span>Google</span></figcaption></figure><figure class="rv"><div class="stars" role="img" aria-label="5 / 5">★★★★★</div><blockquote lang="en">Returning customer here, super friendly and flexible owner/guide and new quads ready for a challenge, would recommend to anyone new or experienced!</blockquote><figcaption><b>Chiwi isOP</b> <span>Google</span></figcaption></figure><figure class="rv"><div class="stars" role="img" aria-label="5 / 5">★★★★★</div><blockquote lang="en">Awesome views, new Atvs and a great guide. 10/10 experience!</blockquote><figcaption><b>Yuval Daniel</b> <span>Local Guide · Google</span></figcaption></figure></div>
+  <div class="rv-foot"><span>Reviews are shown as written on Google.</span> <a class="btn ghost" href="#book">Book your ride</a></div>
+</div></section>
+
 <section class="section bay" id="fortresses"><div class="wrap"><div class="split">
   <div>
     <h2>Fortress visits</h2>
@@ -627,7 +669,6 @@ form.inq .check input{width:auto;margin-top:.25rem}
   <h2>On the trail</h2>
   <p class="lead" style="margin-top:1rem">Views, dust and good company. Tap a photo or video to open it.</p>
   <div class="gallery"><a class="media lb wide" href="images/gallery-01.jpg" data-slot="images/gallery-01.jpg"><img src="images/gallery-01.jpg" width="1600" height="800" loading="lazy" alt="Riders overlooking the Bay of Kotor from a viewpoint" onerror="this.remove()"></a><a class="media lb" href="images/gallery-02.jpg" data-slot="images/gallery-02.jpg"><img src="images/gallery-02.jpg" width="800" height="800" loading="lazy" alt="Quad on a gravel road with the bay in the background" onerror="this.remove()"></a><a class="media lb" href="images/gallery-03.jpg" data-slot="images/gallery-03.jpg"><img src="images/gallery-03.jpg" width="800" height="800" loading="lazy" alt="Quads parked at a viewpoint above Perast" onerror="this.remove()"></a><a class="media lb" href="images/gallery-04.jpg" data-slot="images/gallery-04.jpg"><img src="images/gallery-04.jpg" width="800" height="800" loading="lazy" alt="Off-road forest trail above the Bay of Kotor" onerror="this.remove()"></a><a class="media lb wide" href="images/gallery-05.jpg" data-slot="images/gallery-05.jpg"><img src="images/gallery-05.jpg" width="1600" height="800" loading="lazy" alt="Guests taking a break with a view of the bay" onerror="this.remove()"></a><a class="media lb" href="images/gallery-06.jpg" data-slot="images/gallery-06.jpg"><img src="images/gallery-06.jpg" width="800" height="800" loading="lazy" alt="Riders overlooking the Bay of Kotor from a viewpoint" onerror="this.remove()"></a></div>
-  <p style="margin-top:1.4rem"><a class="more" href="https://www.google.com/maps/place/Quad+tours+-+Squad+Montenegro/@42.5128089,18.6989249,1977m/data=!3m1!1e3!4m6!3m5!1s0x134c375ee5b7c4a9:0xc20cc42c76129c5b!8m2!3d42.511432!4d18.6956426!16s%2Fg%2F11yh1zy04c?entry=ttu&g_ep=EgoyMDI2MDkxNS4wIKXMDSoASAFQAw%3D%3D" rel="noopener" target="_blank">Read our Google reviews</a></p>
 </div></section>
 
 <section class="section mud" id="partners"><div class="wrap">
@@ -645,16 +686,7 @@ form.inq .check input{width:auto;margin-top:.25rem}
   <ul class="know"><li><b>Drivers:</b> minimum age 21 and a valid driving licence is required.</li><li><b>Passengers:</b> from 12 years old. Children can ride as passengers.</li><li><b>Equipment:</b> helmet and protective gear are included in the price.</li><li><b>Weight:</b> there is no weight limit.</li><li><b>Booking:</b> we operate by booking. There are no special booking conditions, just contact us.</li><li><b>Bad weather:</b> by agreement with you, the tour can be cancelled in good time.</li><li><b>Transport:</b> we offer a transport option for certain tours. Ask us when you book.</li></ul>
 </div></section>
 
-<section class="section mist" id="safety"><div class="wrap">
-  <h2>Safety and liability waiver</h2>
-  <p class="lead" style="margin-top:1rem">Quad biking is an exciting adventure, but it is not without risks. Please read this before you book.</p>
-  <div class="safety" style="margin-top:2rem">
-    <div><h3 style="font-size:1.6rem;margin-bottom:1rem">Keep these points in mind</h3><ul><li><strong>Quads can be unpredictable.</strong> Unlike a car, they can tip or roll over, especially on uneven or steep terrain. Even at moderate speeds, a sudden turn or obstacle can cause loss of control.</li><li><strong>High speeds increase risk.</strong> The faster you go, the less time you have to react. On gravel, rocks or wet surfaces, stopping distances are longer and skidding can occur.</li><li><strong>Inexperience can be dangerous.</strong> Quads may feel easy to handle, but riders can misjudge distance, speed or braking.</li><li><strong>Weather and terrain add hazards.</strong> Rain, mud, loose gravel and slopes make driving conditions unpredictable. Slow down and adjust to the conditions.</li><li><strong>Accidents can cause serious injuries,</strong> from broken bones to head injuries. Wearing a helmet and protective gear is essential, but riding responsibly is even more important.</li></ul></div>
-    <div class="waiver"><h3>Please read before the tour</h3><ul><li><strong>Extreme terrain:</strong> our route includes driving along high cliffs and steep mountain edges.</li><li><strong>Zero margin for error:</strong> any lapse in concentration or incorrect maneuver in these sections can have fatal consequences.</li><li><strong>Severe risk:</strong> by participating, you acknowledge that this activity involves inherent risks, including the potential for serious bodily injury or death.</li><li><strong>Follow instructions:</strong> you must follow the guide's directions at all times. Any deviation from the designated trail or reckless behavior is at your own risk.</li><li><strong>Fitness and sobriety:</strong> you confirm that you are in good physical health and not under the influence of alcohol or any substances that may impair your judgment.</li></ul><p>By participating in this tour, you voluntarily assume all risks and release the organizer from any liability in the event of an accident.</p></div>
-  </div>
-</div></section>
-
-<section class="section mist" id="faq" style="padding-top:0"><div class="wrap">
+<section class="section mist" id="faq"><div class="wrap">
   <h2>Frequently asked questions</h2>
   <div class="faq" style="margin-top:2rem"><details><summary>What is included in the price?</summary><p>All tours include snacks, drinks, a hot espresso, and helmet and protective gear. The Big Boyz Tour also includes a meal at a restaurant.</p></details>
 <details><summary>Do you offer any discounts?</summary><p>Yes. We offer a 10% discount if you book 2 or more quads. You also get 10% off at partner businesses such as Locanda restaurant in Perast, and 10% off every tour when you stay at a partner accommodation. See the <a href="./#partners">partner programme</a>.</p></details>
@@ -668,6 +700,16 @@ form.inq .check input{width:auto;margin-top:.25rem}
 <details><summary>How do I book?</summary><p>Send us a message on WhatsApp, an email or the inquiry form. We operate by booking and there are no special booking conditions.</p></details>
 <details><summary>What if the weather is bad?</summary><p>By agreement with you, the tour can be cancelled in good time if weather conditions are bad.</p></details>
 <details><summary>Do you offer transport?</summary><p>For certain tours we offer a transport option. Ask us when you book.</p></details></div>
+  <div class="safety-first" id="safety">
+    <h2>Safety first</h2>
+    <p class="lead" style="margin-top:.8rem">Your guide will give you a full safety briefing before departure. Helmets and protective equipment are provided, and all participants must follow the guide's instructions throughout the tour.</p>
+    <div class="faq"><details><summary>Important safety information</summary>
+      <div class="safety" style="margin:.4rem 0 1.4rem">
+        <div><h3 style="font-size:1.4rem;margin-bottom:.8rem">Riding safely</h3><ul><li><strong>Quads handle differently from cars.</strong> On uneven or steep terrain they can tip, even at moderate speeds, so speed should always match the terrain.</li><li><strong>Surface matters.</strong> Stopping distances are longer on gravel, rocks and wet surfaces.</li><li><strong>Ask if you are unsure.</strong> Quads feel easy to ride, but distance, speed and braking are easy to misjudge. Your guide is there to help.</li><li><strong>Weather and terrain change conditions.</strong> Rain, mud, loose gravel and slopes call for a slower pace.</li><li><strong>Wear your protection.</strong> Always wear the helmet and protective equipment provided. Riding responsibly is the most important safety measure.</li></ul></div>
+        <div><h3 style="font-size:1.4rem;margin-bottom:.8rem">Terms of participation</h3><ul><li><strong>Mountain terrain:</strong> some sections run along steep mountain edges, so staying focused and on the designated trail is important.</li><li><strong>Guide's instructions:</strong> please follow your guide's directions at all times. Leaving the designated trail or riding recklessly is at your own risk.</li><li><strong>Fitness and sobriety:</strong> participants confirm they are in good physical health and not under the influence of alcohol or any substances that may impair judgement.</li><li><strong>Inherent risk:</strong> quad riding is an adventure activity that carries inherent risks, including the risk of injury.</li></ul><p style="margin-top:1rem;font-weight:700">By participating in this tour, you accept these risks and release the organizer from liability in the event of an accident.</p></div>
+      </div>
+    </details></div>
+  </div>
 </div></section>
 
 <section class="section" id="book"><div class="wrap book-grid">
